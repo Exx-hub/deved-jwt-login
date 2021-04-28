@@ -1,9 +1,8 @@
 const jwt = require("jsonwebtoken");
 
 module.exports = function (req, res, next) {
-	const token = req.header("auth-token");
-
-	// console.log(token);
+	const token = req.header("auth-token"); // one way to get as function
+	const token2 = req.headers["auth-token"]; // directly access headers
 
 	if (!token) return res.status(401).send("Access denied");
 
@@ -11,7 +10,6 @@ module.exports = function (req, res, next) {
 		const verifiedUser = jwt.verify(token, process.env.TOKEN_SECRET);
 		console.log(verifiedUser);
 		req.user = verifiedUser;
-		console.log(req.user);
 		next(); // to go to the next middle ware
 	} catch (err) {
 		res.status(400).send("invalid token");
